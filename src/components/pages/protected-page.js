@@ -1,4 +1,5 @@
 import React from 'react';
+import RequiresLogin from '../../HOC/requires-login';
 
 function ProtectedPage(props){
     
@@ -9,4 +10,4 @@ function ProtectedPage(props){
     )
 }
 
-export default ProtectedPage;
+export default RequiresLogin()(ProtectedPage);

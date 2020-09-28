@@ -47,7 +47,6 @@ export function AuthContextProvider(props){
     const login = async (email,password) => {
         try{
             setLoading(true);
-            //debugger;
             const url = `${API_BASE_URL}/auth/login`;
             const body = {
                 email,
@@ -55,14 +54,12 @@ export function AuthContextProvider(props){
             };
             const authRes = await axios.post(url,body);
             const {authToken} = authRes.data;
-            //debugger;
             if(authToken){
                 setAuth(authToken);
             }
             else{
                 resetAuth();
             }
-            //debugger;
         }
         catch(e){
             console.log('error loging in: ',e);
