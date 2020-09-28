@@ -1,31 +1,56 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {AuthContext} from '../../contexts/auth-context';
 import './styles/login-form.css';
 
 export default function LoginForm(props){
 
-    const tryLogin = (event) => {
+    const [email,setEmail] = useState(null);
+    const [pass,setPass] = useState(null);
+    const {authState,login} = useContext(AuthContext); 
+    const {authKey,isLoggedIn,authLoading,authError} = authState;
+    const emailType = 'email';
+    const passType = 'pass';
+    const tryLogin = async (event) => {
         event.persist();
         event.preventDefault();
+        if(email && pass){
+            console.log('login');
+            try{
+                await login(email,pass);
+            }
+            catch(e){
+
+            }
+        }
     }
 
-    const inputChanged = (event) => {
+    const inputChanged = (event,type) => {
         event.persist();
+        const val = event.target.value;
+        if(type === emailType){
+            setEmail(val);
+        }
+        else if(type === passType){
+            setPass(val);
+        }
     }
-    let displayLoading = false;
+    let displayLoading = authLoading;
+    console.log('loading: ',displayLoading);
+    console.log('render form',authError,displayLoading);
     return(
         <div className="login-container center-container">
             <form className="login-form" onSubmit={(e) => tryLogin(e)}>
                 <Typography variant='h4' className="form-title">{props.title}</Typography>
                 <div className="input-container">
-                    <TextField required id="user" label="Email" variant="outlined" helperText={props.error ? 'Error Loging in' : ''} onChange={(e) => inputChanged(e,'email')}/>
+                    <TextField required id="user" label="Email" variant="outlined" helperText={authError ? 'Error Loging in' : ''} onChange={(e) => inputChanged(e,emailType)}/>
                 </div>
                 <div className="input-container">
-                    <TextField required id="password" label="Password" variant="outlined" type="password" helperText={props.error ? 'Error Loging in' : ''} onChange={(e) => inputChanged(e,'pass')}/>
+                    <TextField required id="password" label="Password" variant="outlined" type="password" helperText={authError ? 'Error Loging in' : ''} onChange={(e) => inputChanged(e,passType)}/>
                 </div>
                 <div className="input-container">
                     <CircularProgress className={displayLoading ? '' : 'hidden'} />

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ProtectedPage(props){
+function ProtectedPage(props){
     
     return(
         <div className="center-container">
@@ -8,3 +8,5 @@ export default function ProtectedPage(props){
         </div>
     )
 }
+
+export default ProtectedPage;
